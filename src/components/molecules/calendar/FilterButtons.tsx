@@ -1,33 +1,16 @@
-import RadioButton from '@/components/atoms/button/ToggleButton';
 import ToggleButton from '@/components/atoms/button/ToggleButton';
-import { calendarStore } from '@/libs/zustand';
-import { format } from 'date-fns';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import useFilterButtons from './FilterButtons.hook';
 
 const FilterButtons = () => {
-  const { selectedDate, setSelectedDate } = calendarStore((state) => state);
-  const [isToday, setIsToday] = useState(true);
-  const toDay = new Date();
-
-  const handleTodayToggle = () => {
-    setSelectedDate(format(toDay, 'yyyy-MM-dd'));
-  };
-
-  useEffect(() => {
-    setIsToday(format(toDay, 'yyyy-MM-dd') === selectedDate);
-    console.log(
-      '🚀  file: FilterButtons.tsx:21  FilterButtons  selectedDate_',
-      selectedDate,
-    );
-    setSelectedDate(format(toDay, 'yyyy-MM-dd'));
-  }, [selectedDate]);
-
+  const { isToday, handleTodayToggle, handleCompletedToggle } = useFilterButtons();
   return (
     <div className="mt-4 flex gap-14 rounded border border-none bg-dark px-3 py-5">
       <div className="basis-1/2">
         <ToggleButton
-          isSelected={isToday}
-          onSelected={handleTodayToggle}
+          disabled={isToday}
+          isDefaultActive={isToday}
+          onClick={handleTodayToggle}
           classname="w-full"
         >
           Today
@@ -35,9 +18,8 @@ const FilterButtons = () => {
       </div>
       <div className="basis-1/2">
         <ToggleButton
-          isSelected={false}
-          onSelected={() => {}}
-          onUnSelected={() => {}}
+          isDefaultActive={false}
+          onClick={handleCompletedToggle}
           classname="w-full"
         >
           Completed
@@ -47,4 +29,4 @@ const FilterButtons = () => {
   );
 };
 
-export default FilterButtons;
+export default React.memo(FilterButtons);

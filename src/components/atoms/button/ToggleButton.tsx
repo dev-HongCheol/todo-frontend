@@ -3,34 +3,35 @@ import Button from './Button';
 
 type ToggleButtonProps = {
   children: ReactNode;
-  onSelected?: () => void;
-  onUnSelected?: () => void;
-  isSelected?: boolean;
+  onClick?: (isActive: boolean) => void;
+  isDefaultActive?: boolean;
   classname?: string;
+  disabled?: boolean;
 };
 
 const ToggleButton = ({
   children,
-  isSelected = true,
-  onSelected,
-  onUnSelected,
+  isDefaultActive = true,
+  onClick,
   classname = '',
+  disabled = false,
 }: ToggleButtonProps) => {
-  const [_isSelected, setIsSelected] = useState(isSelected);
-  const handleToggleBtn = () => {
-    setIsSelected((pre) => !pre);
-    _isSelected ? onSelected && onSelected() : onUnSelected && onUnSelected();
-  };
-
+  const [isActive, setIsActive] = useState(isDefaultActive);
   useEffect(() => {
-    console.log('🚀 _ file: ToggleButton.tsx:18 _ _isSelected:', _isSelected);
-  });
+    setIsActive(isDefaultActive);
+  }, [isDefaultActive]);
+
+  const handleToggleBtn = (isActive: boolean) => {
+    setIsActive(!isActive);
+    onClick && onClick(!isActive);
+  };
 
   return (
     <Button
-      variant={_isSelected ? 'contained' : 'outlined'}
-      className={`${!_isSelected ? 'border-white/30' : ''} ${classname}`}
-      onClick={handleToggleBtn}
+      variant={isActive ? 'contained' : 'outlined'}
+      className={`${!isActive ? 'border-white/30' : ''} ${classname}`}
+      onClick={() => handleToggleBtn(isActive)}
+      disabled={disabled}
     >
       {children}
     </Button>

@@ -1,16 +1,19 @@
 import { add, format } from 'date-fns';
 
-import React, { useState } from 'react';
+import React from 'react';
 import { twMerge } from 'tailwind-merge';
 
-type WeekCalendarProps = {
+type WeeklyDayButtonsProps = {
   selectedDay: Date;
   setSelectedDay: React.Dispatch<React.SetStateAction<Date>>;
 };
 
-const WeekCalendar = ({ selectedDay, setSelectedDay }: WeekCalendarProps) => {
+const WeeklyDayButtons = ({ selectedDay, setSelectedDay }: WeeklyDayButtonsProps) => {
   const weekArray = new Array(7).fill(1);
-  const isWeekend = (day: number) => day === 0 || day === 6;
+  const isWeekend = (date: Date) => {
+    const dayOfWeek = Number(format(date, 'i'));
+    return dayOfWeek === 6 || dayOfWeek === 7;
+  };
 
   return (
     <div className="flex">
@@ -25,7 +28,7 @@ const WeekCalendar = ({ selectedDay, setSelectedDay }: WeekCalendarProps) => {
               )}
               onClick={() => setSelectedDay(day)}
             >
-              <p className={`mb-2 ${isWeekend(index) && 'text-red-500'}`}>
+              <p className={`mb-2 ${isWeekend(day) && 'text-red-500'}`}>
                 {format(day, 'EEE').toLocaleUpperCase()}
               </p>
               <p className="">{format(day, 'd')}</p>
@@ -37,11 +40,11 @@ const WeekCalendar = ({ selectedDay, setSelectedDay }: WeekCalendarProps) => {
   );
 };
 
-function WeekCalendarPropsSelectedDayEqual(
-  prevMovie: WeekCalendarProps,
-  nextMovie: WeekCalendarProps,
+function WeeklyDayButtonsPropsSelectedDayEqual(
+  prevWeeklyDayButtons: WeeklyDayButtonsProps,
+  nextWeeklyDayButtons: WeeklyDayButtonsProps,
 ) {
-  return prevMovie.selectedDay === nextMovie.selectedDay;
+  return prevWeeklyDayButtons.selectedDay === nextWeeklyDayButtons.selectedDay;
 }
 
-export default React.memo(WeekCalendar, WeekCalendarPropsSelectedDayEqual);
+export default React.memo(WeeklyDayButtons, WeeklyDayButtonsPropsSelectedDayEqual);

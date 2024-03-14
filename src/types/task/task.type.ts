@@ -39,7 +39,7 @@ export enum TASK_FORM_STEP {
   CREATE_CATEGORY,
 }
 
-export type PeriodFilter = 'today' | 'week' | 'month';
+export type PeriodFilter = 'today' | 'week' | 'month' | string;
 export type IsCompletedFilter = 'all' | 'task' | 'done';
 export interface TaskFilter {
   keyword: string;
